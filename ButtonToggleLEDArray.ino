@@ -1,66 +1,67 @@
-#include "Button.h"
+// Get our Button class from Button.h
+#include "Button.h" 
 
+// Define which pins we are using as LED outputs.
+/*
+Extending exercise:
+  - Add these LEDs to an array
+  - Use for-loops and array access for pinMode(s), and digitalWrite(s)
+  - Create a LED class which allows you to set an optional gnd pin, similar
+  to our Button class
+*/
 #define LED_1 2
 #define LED_2 4
 #define LED_3 6
 
+
+// Define which pins are being used to define a button
 #define BUTTON_INPUT_1 10
 #define BUTTON_GND_1 11
 #define BUTTON_PWR_1 12
 
-Button led_button;
+
+// Construct a new button called led_button and define
+// the input, gnd, and power pins
+Button led_button(BUTTON_INPUT_1, BUTTON_GND_1, BUTTON_PWR_1);
 
 void setup() {
-  Serial.begin(9600);
-  // put your setup code here, to run once:
+  // Initialize the led_button
+  // (Sets the pin modes for the associated pins)
+  led_button.init();
 
-  // pinMode(BUTTON_GND_1, OUTPUT);
-  // pinMode(BUTTON_PWR_1, OUTPUT);
-
-  // digitalWrite(BUTTON_GND_1, LOW); // Sets pin as GND for BUTTON 1
-  // digitalWrite(BUTTON_PWR_1, HIGH); // Sets pin as PWR for BUTTON 1
-
-  // pinMode(BUTTON_INPUT_1, INPUT);
-
-  led_button.init(BUTTON_INPUT_1, BUTTON_GND_1, BUTTON_PWR_1);
-
+  // Set the pinMode to output for all of your LEDs
   pinMode(LED_1, OUTPUT);
   pinMode(LED_2, OUTPUT);
   pinMode(LED_3, OUTPUT);
-
 }
 
-bool button_was_pressed = false;
+// This led_state variable keeps track of whether
+// the LEDs should be ON (true) or OFF (false)
 
-bool buttonToggled() {
-  bool button_is_pressed = 
-  digitalRead(BUTTON_INPUT_1);
-
-  bool button_toggled = !button_was_pressed 
-                        && button_is_pressed;
-  // 2. if the button was not pressed and now it ispressed note that thebutton has been toggled
-
-  // 4. update whether the button was pressed
-  button_was_pressed = button_is_pressed;
-
-  // 5. return whether or not the button was toggled
-  return button_toggled;
-}
-
+/*
+Extending exercise:
+  - Create a pair of macros called ON and OFF to more easily understand the
+  state of the LEDs
+*/
 bool led_state = false;
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  if (buttonToggled())
-    led_state = !led_state;
+  // "Ask" the button if it has been toggled
+  if (led_button.buttonToggled())
+    led_state = !led_state; // If it has, change the led_state
 
+  // If the led_state is true (ON)
   if(led_state) {
+    // Turn the LEDs ON
     digitalWrite(LED_1, HIGH); 
     digitalWrite(LED_2, HIGH); 
     digitalWrite(LED_3, HIGH); 
-    return;
+    return; // and stop running this loop
   }
 
+  // Otherwise (implicitly, since the function never reaches this point
+  // when led_state is true (ON)).
+  // Turn the LEDs OFF
   digitalWrite(LED_1, LOW); 
   digitalWrite(LED_2, LOW); 
   digitalWrite(LED_3, LOW); 
