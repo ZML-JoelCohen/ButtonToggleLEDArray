@@ -8,9 +8,10 @@
 #define BUTTON_GND_1 11
 #define BUTTON_PWR_1 12
 
-Button led_button(BUTTON_INPUT_1, BUTTON_GND_1, BUTTON_PWR_1);
+Button led_button;
 
 void setup() {
+  Serial.begin(9600);
   // put your setup code here, to run once:
 
   // pinMode(BUTTON_GND_1, OUTPUT);
@@ -21,7 +22,7 @@ void setup() {
 
   // pinMode(BUTTON_INPUT_1, INPUT);
 
-  led_button.init();
+  led_button.init(BUTTON_INPUT_1, BUTTON_GND_1, BUTTON_PWR_1);
 
   pinMode(LED_1, OUTPUT);
   pinMode(LED_2, OUTPUT);
