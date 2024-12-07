@@ -1,4 +1,4 @@
-#include <Arduino.h>
+#include "Button.h"
 
 #define LED_1 2
 #define LED_2 4
@@ -8,16 +8,20 @@
 #define BUTTON_GND_1 11
 #define BUTTON_PWR_1 12
 
+Button led_button(BUTTON_INPUT_1, BUTTON_GND_1, BUTTON_PWR_1);
+
 void setup() {
   // put your setup code here, to run once:
 
-  pinMode(BUTTON_GND_1, OUTPUT);
-  pinMode(BUTTON_PWR_1, OUTPUT);
+  // pinMode(BUTTON_GND_1, OUTPUT);
+  // pinMode(BUTTON_PWR_1, OUTPUT);
 
-  digitalWrite(BUTTON_GND_1, LOW); // Sets pin as GND for BUTTON 1
-  digitalWrite(BUTTON_PWR_1, HIGH); // Sets pin as PWR for BUTTON 1
+  // digitalWrite(BUTTON_GND_1, LOW); // Sets pin as GND for BUTTON 1
+  // digitalWrite(BUTTON_PWR_1, HIGH); // Sets pin as PWR for BUTTON 1
 
-  pinMode(BUTTON_INPUT_1, INPUT);
+  // pinMode(BUTTON_INPUT_1, INPUT);
+
+  led_button.init();
 
   pinMode(LED_1, OUTPUT);
   pinMode(LED_2, OUTPUT);
@@ -42,9 +46,14 @@ bool buttonToggled() {
   return button_toggled;
 }
 
+bool led_state = false;
+
 void loop() {
   // put your main code here, to run repeatedly:
-  if(buttonToggled()) {
+  if (buttonToggled())
+    led_state = !led_state;
+
+  if(led_state) {
     digitalWrite(LED_1, HIGH); 
     digitalWrite(LED_2, HIGH); 
     digitalWrite(LED_3, HIGH); 
